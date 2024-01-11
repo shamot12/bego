@@ -44,7 +44,7 @@ const validRequest: RequestHandler = async (req: Request, res: Response, next: N
 
             next();
         } catch(err) {
-            return res.status(500).send('Please try again later.');
+            return res.status(400).send('Bad request');
         }
     }
 }

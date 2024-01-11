@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { Point } from '../../db/models/Points.js'
+import { Point } from '../../db/models/Point.js'
 
 /**
  * Retrieves all points available.

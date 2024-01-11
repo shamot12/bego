@@ -7,19 +7,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Point } from '../../db/models/Point.js';
-/**
- * Retrieves all points available.
- */
-function AllPoints(req, res) {
+import { Schema, model } from 'mongoose';
+// Point schema based on Point interface
+const pointSchema = new Schema({
+    location: {
+        name: {
+            type: String,
+            required: [true, 'Name required']
+        },
+        placeId: {
+            type: String,
+            required: [true, 'Place Id required']
+        }
+    }
+});
+pointSchema.static('getAllPoints', function getAllPoints() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            var points = yield Point.getAllPoints();
-            res.status(200).send(points);
-        }
-        catch (error) {
-            res.status(500).send({ success: false, errors: error.message });
-        }
+        const points = yield Point.find();
+        return points;
     });
-}
-export { AllPoints };
+});
+// Point model based on Point schema
+const Point = model('Point', pointSchema);
+export { Point };

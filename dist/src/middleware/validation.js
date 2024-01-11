@@ -37,7 +37,7 @@ const validRequest = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
             next();
         }
         catch (err) {
-            return res.status(500).send('Please try again later.');
+            return res.status(400).send('Bad request');
         }
     }
 });
