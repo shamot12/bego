@@ -6,6 +6,7 @@ import { setDBConnection } from './db/connection.js'
 
 import { authRouter } from './src/routes/auth.js'
 import { pointsRouter } from './src/routes/points.js'
+import { trucksRouter } from './src/routes/trucks.js'
 import { notFound, validRequest } from './src/middleware/validation.js'
 
 setDBConnection().catch(err => {
@@ -30,6 +31,7 @@ app.use(validRequest);
 
 // API authentication required routes 
 app.use('/points', pointsRouter);
+app.use('/trucks', trucksRouter);
 
 // Server validation
 app.use(notFound);

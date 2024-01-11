@@ -7,19 +7,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Point } from '../../db/models/Point.js';
+import { Truck } from '../../db/models/Truck.js';
 /**
- * Retrieves all points available.
+ * Retrieves all trucks available.
  */
-function AllPoints(req, res) {
+function AllTrucks(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            var points = yield Point.getAllPoints();
-            res.status(200).send(points);
+            var trucks = yield Truck.getAllTrucks();
+            res.status(200).send(trucks);
         }
         catch (error) {
             res.status(500).send({ success: false, errors: error.message });
         }
     });
 }
-export { AllPoints };
+export { AllTrucks };
