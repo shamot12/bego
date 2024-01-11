@@ -37,4 +37,4 @@ pointSchema.static('getAllPoints', async function getAllPoints ():  Promise<Arra
 // Point model based on Point schema
 const Point = model<Required<IPoint>, PointModel> ('Point' , pointSchema);
 
-export { Point }
+export { Point, IPoint, pointSchema }

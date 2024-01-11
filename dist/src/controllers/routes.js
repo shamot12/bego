@@ -7,26 +7,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Schema, model } from 'mongoose';
-// Point schema based on Point interface
-const pointSchema = new Schema({
-    location: {
-        name: {
-            type: String,
-            required: [true, 'Name required']
-        },
-        placeId: {
-            type: String,
-            required: [true, 'Place Id required']
-        }
-    }
-});
-pointSchema.static('getAllPoints', function getAllPoints() {
+import { Route } from '../../db/models/Route.js';
+/**
+ * Retrieves all Routes available.
+ */
+function AllRoutes(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const points = yield Point.find();
-        return points;
+        try {
+            var routes = yield Route.getAllRoutes();
+            res.status(200).send(routes);
+        }
+        catch (error) {
+            res.status(500).send({ success: false, errors: error.message });
+        }
     });
-});
-// Point model based on Point schema
-const Point = model('Point', pointSchema);
-export { Point, pointSchema };
+}
+export { AllRoutes };
