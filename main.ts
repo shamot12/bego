@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import { setDBConnection } from './db/connection.js'
 
 import { authRouter } from './src/routes/auth.js'
+import { pointsRouter } from './src/routes/points.js'
 import { notFound, validRequest } from './src/middleware/validation.js'
 
 setDBConnection().catch(err => {
@@ -28,6 +29,7 @@ app.use('/auth', authRouter);
 app.use(validRequest);
 
 // API authentication required routes 
+app.use('/points', pointsRouter);
 
 // Server validation
 app.use(notFound);
