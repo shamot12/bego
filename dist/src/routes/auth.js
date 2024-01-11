@@ -1,9 +1,8 @@
 import express from 'express';
 import { checkSchema } from 'express-validator';
-import { Register, Test } from '../controllers/auth.js';
+import { SignUp, SignIn } from '../controllers/auth.js';
 export const authRouter = express.Router();
-authRouter.get('/test', Test);
-authRouter.post('/signup', checkSchema({
+const authValidatorSchema = checkSchema({
     email: {
         isEmail: true,
         errorMessage: 'Invalid email',
@@ -11,7 +10,21 @@ authRouter.post('/signup', checkSchema({
     password: {
         isLength: {
             options: { min: 8 },
-            errorMessage: 'Password should be at least 8 chars',
+            errorMessage: 'Password length must be at least 8 characters',
         },
     },
-}), Register);
+});
+/**
+ * User registration route
+ * POST request : application/json
+ * @param email - required - valid email
+ * @param password - required - length must be at least 8 characters
+ */
+authRouter.post('/signup', authValidatorSchema, SignUp);
+/**
+ * User login route
+ * POST request : application/json
+ * @param email - required - valid email
+ * @param password - required - length must be at least 8 characters
+ */
+authRouter.post('/signin', authValidatorSchema, SignIn);
