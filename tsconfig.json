@@ -32,7 +32,8 @@
     "paths": {
       "mongoose": ["./node_modules/mongoose/types/index.d.ts"],
       "express-validator": ["./node_modules/express-validator/src/index.d.ts"],
-      "helmet": ["./node_modules/helmet/index.d.cts"]
+      "helmet": ["./node_modules/helmet/index.d.cts"],
+      "node-fetch": ["./node_modules/node-fetch/@types/index.d.ts"],
     },  /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": ["./node_modules/mongoose/types"],                                  /* Specify multiple folders that act like './node_modules/@types'. */

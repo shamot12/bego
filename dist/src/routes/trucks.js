@@ -4,4 +4,4 @@ export const trucksRouter = express.Router();
 /**
  * Retrieves all trucks available
  */
-trucksRouter.get('/get', AllTrucks);
+trucksRouter.get('/getAll', AllTrucks);

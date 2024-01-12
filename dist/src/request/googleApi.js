@@ -7,11 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-/**
- * Function to perform a delay between each remote request
- * @param ms miliseconds to wait
- */
-const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+import fetch from 'node-fetch';
 /**
  * Request to Google Maps API that transform placeId to global coordinates
  * Docs: https://developers.google.com/maps/documentation/geocoding/requests-geocoding?hl=en#GeocodingResponses
@@ -20,7 +16,6 @@ const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  */
 function GoogleGoordinatesRequest(placeId) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield delay(100);
         const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${process.env.MAPS_GOOGLE_APIS_KEY}`;
         const options = {
             method: 'GET',
@@ -53,7 +48,6 @@ function GoogleGoordinatesRequest(placeId) {
  */
 function GoogleDistanceRequest(from, to) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield delay(100);
         const data = {
             "origin": {
                 "location": {

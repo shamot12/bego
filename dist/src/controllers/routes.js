@@ -142,7 +142,7 @@ function UpdateRoute(req, res) {
             const distance = yield GoogleDistanceRequest(latlngA, latlngB);
             // Updates 
             yield route.updateRoute(data.new.pointA, latlngA.lat, latlngA.lng, data.new.pointB, latlngB.lat, latlngB.lng, distance);
-            return res.status(200).send({ success: true, message: 'Route was successfully deleted' });
+            return res.status(200).send({ success: true, message: 'Route was successfully updated' });
         }
         catch (error) {
             return res.status(400).send({ success: false, message: error.message });

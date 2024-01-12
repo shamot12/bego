@@ -1,8 +1,4 @@
-/**
- * Function to perform a delay between each remote request
- * @param ms miliseconds to wait
- */
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import fetch from 'node-fetch';
 
 /**
  * Request to Google Maps API that transform placeId to global coordinates
@@ -11,7 +7,6 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  * @returns Object with latitude and longitude coordinates. { lat : 0.0 , lng : 0.0 }
  */
 async function GoogleGoordinatesRequest(placeId: string) {
-    await delay(100);
     const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${process.env.MAPS_GOOGLE_APIS_KEY}`
     
     const options = {
@@ -23,7 +18,7 @@ async function GoogleGoordinatesRequest(placeId: string) {
     // console.log(url);
     try{
         const response = await fetch(url, options);
-        const body = await response.json();
+        const body:any = await response.json();
         if(body.status == 'OK'){
             return { lat: body.results[0].geometry.location.lat, lng : body.results[0].geometry.location.lng };
         } else {
@@ -41,7 +36,6 @@ async function GoogleGoordinatesRequest(placeId: string) {
  * @returns Distance in km between the points
  */
 async function GoogleDistanceRequest(from, to) {
-    await delay(100);
     const data = {
         "origin":{
           "location":{
@@ -78,7 +72,7 @@ async function GoogleDistanceRequest(from, to) {
 
     try{
         const response = await fetch(url, options);
-        const body = await response.json();
+        const body:any = await response.json();
         if(!isNaN(body.routes[0].distanceMeters)){
             return (body.routes[0].distanceMeters / 1000); // Distance in km
         }

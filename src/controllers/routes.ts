@@ -152,7 +152,7 @@ async function UpdateRoute (req: Request, res: Response) {
         await route.updateRoute(data.new.pointA, latlngA.lat, latlngA.lng,
                                 data.new.pointB, latlngB.lat, latlngB.lng, distance);
 
-        return res.status(200).send({ success: true, message : 'Route was successfully deleted' });
+        return res.status(200).send({ success: true, message : 'Route was successfully updated' });
     } catch (error: any) {
         return res.status(400).send({ success: false, message : error.message });
     }
