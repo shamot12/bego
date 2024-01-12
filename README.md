@@ -9,7 +9,7 @@ There are 5 modules that integrates this API.
 - Routes: CRUD for managing routes.
 - Orders: CRUD for managing orders.
 
-For deploying you can run from the root folder `npm run start`, or if prefered, `node dist/main.js`.
+For deploying you can run from the root folder `npm run start`, or if prefered, `node dist/main.js`. If deployed locally, server URL is `http://localhost:3000`.
 
 ### Architecture
 
