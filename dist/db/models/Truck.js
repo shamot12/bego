@@ -35,6 +35,10 @@ const truckSchema = new Schema({
         required: [true, 'Created_at required']
     }
 });
+/**
+ * Gets all existing trucks
+ * @returns Trucks document array
+ */
 truckSchema.static('getAllTrucks', function getAllTrucks() {
     return __awaiter(this, void 0, void 0, function* () {
         const trucks = yield Truck.find();

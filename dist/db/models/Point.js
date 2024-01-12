@@ -21,12 +21,21 @@ const pointSchema = new Schema({
         }
     }
 });
+/**
+ * Gets all existing points
+ * @returns Points document array
+ */
 pointSchema.static('getAllPoints', function getAllPoints() {
     return __awaiter(this, void 0, void 0, function* () {
         const points = yield Point.find();
         return points;
     });
 });
+/**
+ * Gets an existing point, if it exists
+ * @returns Point document
+ * @throws message
+ */
 pointSchema.static('getPoint', function getPoint(name) {
     return __awaiter(this, void 0, void 0, function* () {
         const point = yield Point.findOne({ 'location.name': name });

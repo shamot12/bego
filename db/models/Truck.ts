@@ -44,6 +44,10 @@ const truckSchema = new Schema<Required<ITruck>, TruckModel, ITruckMethods>({
     }
 });
 
+/**
+ * Gets all existing trucks
+ * @returns Trucks document array
+ */
 truckSchema.static('getAllTrucks', async function getAllTrucks ():  Promise<Array<HydratedDocument<ITruck, ITruckMethods>>>{
     const trucks = await Truck.find();
     

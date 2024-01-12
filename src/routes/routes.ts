@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkSchema } from 'express-validator';
 
-import { AllRoutes, CreateRoute } from '../controllers/routes.js'
+import { AllRoutes, CreateRoute, ReadRoute } from '../controllers/routes.js'
 
 export const routesRouter = express.Router();
 
@@ -29,3 +29,8 @@ const routeValidatorSchema = checkSchema({
 });
 routesRouter.post('/create', routeValidatorSchema, CreateRoute);
 
+
+/**
+ * Reads an existing route
+ */
+routesRouter.post('/get', routeValidatorSchema, ReadRoute);

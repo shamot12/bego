@@ -43,8 +43,8 @@ const validRequest: RequestHandler = async (req: Request, res: Response, next: N
             }
 
             next();
-        } catch(err) {
-            return res.status(400).send('Bad request');
+        } catch(err: any) {
+            return res.status(400).send('Bad request: ' + err.toString());
         }
     }
 }

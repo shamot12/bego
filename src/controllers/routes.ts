@@ -75,4 +75,33 @@ async function CreateRoute (req: Request, res: Response) {
 }
 
 
-export { AllRoutes, CreateRoute }
+/**
+ * Reads an existing route
+ */
+async function ReadRoute (req: Request, res: Response) {
+    try {
+        const result = validationResult(req);
+        if (!result.isEmpty()) { // Valid data for request
+            return res.status(400).send({ success: false, errors: result.array().map(function(err){
+                return err.msg // Returns errors of data validation
+            })});
+        }
+        const data = matchedData(req);
+        if(data.pointA == data.pointB){ // Departure and arrival must be different.
+            return res.status(400).send({ success: false, message : 'Invalid payload' });
+        }
+        // First, verify that the starting and the ending Points are valid.
+        const pointA = await Point.getPoint(data.pointA);
+        const pointB = await Point.getPoint(data.pointB);
+
+        // If both points are valid, look for route
+        var route = await Route.getRoute(data.pointA, data.pointB);
+
+        return res.status(200).send({ success: true, route : route });
+    } catch (error: any) {
+        return res.status(400).send({ success: false, message : error.message });
+    }
+}
+
+
+export { AllRoutes, CreateRoute, ReadRoute }

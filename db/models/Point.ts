@@ -29,12 +29,21 @@ const pointSchema = new Schema<Required<IPoint>, PointModel, IPointMethods>({
     }
 });
 
+/**
+ * Gets all existing points
+ * @returns Points document array
+ */
 pointSchema.static('getAllPoints', async function getAllPoints ():  Promise<Array<HydratedDocument<IPoint, IPointMethods>>>{
     const points = await Point.find();
     
     return points;
 });
 
+/**
+ * Gets an existing point, if it exists
+ * @returns Point document
+ * @throws message
+ */
 pointSchema.static('getPoint', async function getPoint (name : string):  Promise<HydratedDocument<Required<IPoint>, IPointMethods>> {
     const point = await Point.findOne({ 'location.name' : name });
     if(point !== null)
