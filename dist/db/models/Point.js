@@ -27,6 +27,14 @@ pointSchema.static('getAllPoints', function getAllPoints() {
         return points;
     });
 });
+pointSchema.static('getPoint', function getPoint(name) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const point = yield Point.findOne({ 'location.name': name });
+        if (point !== null)
+            return point;
+        throw { message: 'Invalid point' };
+    });
+});
 // Point model based on Point schema
 const Point = model('Point', pointSchema);
 export { Point, pointSchema };
