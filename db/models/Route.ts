@@ -1,4 +1,4 @@
-import { Schema, model, Model, HydratedDocument } from 'mongoose';
+import { Schema, model, Model, HydratedDocument, Types } from 'mongoose';
 
 // Route interface
 interface IRoute {
@@ -25,6 +25,7 @@ interface RouteModel extends Model<Required<IRoute>, {}, IRouteMethods> {
     getAllRoutes():  Promise<Array<HydratedDocument<Required<IRoute>, IRouteMethods>>>;
     routeExists(pointA: string, pointB: string):  Promise<boolean>;
     getRoute(pointA: string, pointB: string):  Promise<HydratedDocument<Required<IRoute>, IRouteMethods>>;
+    getRouteById(routeId: Types.ObjectId):  Promise<HydratedDocument<Required<IRoute>, IRouteMethods>>;
 }
 
 // Route schema based on Route interface
@@ -67,7 +68,20 @@ routeSchema.static('routeExists', async function routeExists (namePointA: string
  * @throws message
  */
 routeSchema.static('getRoute', async function getRoute (namePointA: string, namePointB: string):  Promise<HydratedDocument<Required<IRoute>, IRouteMethods>> {
-    const route = await Route.findOne({ "pointA.name": namePointA, "pointB.name": namePointB }, {'_id': 0 });
+    const route = await Route.findOne({ "pointA.name": namePointA, "pointB.name": namePointB });
+    if(route !== null)
+        return route;
+
+    throw { message : 'The route does not exist.' };
+});
+
+/**
+ * Gets an existing route by Id
+ * @returns Route document
+ * @throws message
+ */
+routeSchema.static('getRouteById', async function getRouteById (routeId: Types.ObjectId):  Promise<HydratedDocument<Required<IRoute>, IRouteMethods>> {
+    const route = await Route.findOne({ "_id": routeId });
     if(route !== null)
         return route;
 

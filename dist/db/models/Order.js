@@ -18,7 +18,7 @@ var OrderType;
 var Status;
 (function (Status) {
     Status[Status["Created"] = 0] = "Created";
-    Status[Status["Accepted"] = 1] = "Accepted";
+    Status[Status["Scheduled"] = 1] = "Scheduled";
     Status[Status["OnProgress"] = 2] = "OnProgress";
     Status[Status["Completed"] = 3] = "Completed";
 })(Status || (Status = {}));
@@ -27,12 +27,14 @@ var Status;
 const orderSchema = new Schema({
     type: {
         type: String,
+        default: OrderType[OrderType.Normal],
         enum: Object.values(OrderType)
     },
     description: String,
     route: { type: 'ObjectID', ref: 'Route' },
     status: {
         type: String,
+        default: Status[Status.Created],
         enum: Object.values(Status)
     },
     truck: { type: 'ObjectID', ref: 'Truck' }
@@ -55,7 +57,27 @@ orderSchema.static('getAllOrders', function getAllOrders() {
 orderSchema.static('getOrder', function getOrder(orderId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const order = yield Order.findOne({ '_id': orderId })
+            const order = yield Order.findOne({ '_id': orderId });
+            if (order !== null)
+                return order;
+            throw { message: 'The order does not exist.' };
+        }
+        catch (err) {
+            // Invalid oid
+            throw { message: 'The order does not exist.' };
+        }
+    });
+});
+/**
+ * Gets an existing order and populates it with the route and truck references.
+ * Omits order Id on order instance.
+ * @returns Order document
+ * @throws message
+ */
+orderSchema.static('getExtendedOrder', function getExtendedOrder(orderId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const order = yield Order.findOne({ '_id': orderId }, { _id: 0 })
                 .populate('route', { _id: 0 }).populate('truck');
             if (order !== null)
                 return order;
@@ -64,6 +86,54 @@ orderSchema.static('getOrder', function getOrder(orderId) {
         catch (err) {
             // Invalid oid
             throw { message: 'The order does not exist.' };
+        }
+    });
+});
+/**
+ * Updates the current instance document
+ * @returns boolean true when success
+ * @throws message
+ */
+orderSchema.method('updateOrder', function updateOrder(type, description, routeId, status, truckId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            if (this.status == Status[Status.OnProgress]) {
+                return false;
+            }
+            const update = yield Order.updateOne({ _id: this._id }, {
+                type: type,
+                description: description,
+                route: routeId,
+                status: status,
+                truck: truckId
+            });
+            if (update.acknowledged)
+                return true;
+            throw { message: 'Error on updating order' };
+        }
+        catch (e) {
+            throw { message: 'Error on updating order' };
+        }
+    });
+});
+/**
+ * Updates the status of the current instance
+ * @returns boolean true when success
+ * @throws message
+ */
+orderSchema.method('nextStatus', function nextStatus() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            if (this.status != Status[Status.Completed]) {
+                const update = yield Order.updateOne({ _id: this._id }, {
+                    status: Status[Status[this.status] + 1]
+                });
+                return update.acknowledged;
+            }
+            return false;
+        }
+        catch (e) {
+            throw { message: 'Error on deleting order' };
         }
     });
 });
