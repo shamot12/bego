@@ -1,6 +1,6 @@
 import { Schema, model, Model, HydratedDocument, Types } from 'mongoose';
 
-enum orderType {
+enum OrderType {
     Normal,
     Urgent,
     Fragile
@@ -15,10 +15,10 @@ enum Status {
 
 // Order interface
 interface IOrder {
-    type: number;
+    type: string;
     description: string;
     route : Types.ObjectId;
-    status : number;
+    status : string;
     truck : Types.ObjectId;
 }
 
@@ -31,18 +31,16 @@ interface OrderModel extends Model<Required<IOrder>, {}, IOrderMethods> {
 // Order schema based on Order interface
 const orderSchema = new Schema<Required<IOrder>, OrderModel, IOrderMethods>({
     type: {
-        type: Number,
-        default: orderType.Normal,
-        enum: Object.values(orderType)
+        type: String,
+        enum: Object.values(OrderType)
     },
     description: String,
     route : { type: 'ObjectID', ref: 'Route' },
     status : {
-        type: Number,
-        default: Status.Created,
+        type: String,
         enum: Object.values(Status)
     },
-    truck : { type: 'ObjectID', ref: 'Truck' },
+    truck : { type: 'ObjectID', ref: 'Truck' }
 });
 
 /**
@@ -59,4 +57,4 @@ orderSchema.static('getAllOrders', async function getAllOrders ():  Promise<Arra
 // Order model based on Order schema
 const Order = model<Required<IOrder>, OrderModel> ('Order' , orderSchema);
 
-export { Order }
+export { Order, OrderType, Status}

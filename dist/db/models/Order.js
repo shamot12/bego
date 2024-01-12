@@ -8,12 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { Schema, model } from 'mongoose';
-var orderType;
-(function (orderType) {
-    orderType[orderType["Normal"] = 0] = "Normal";
-    orderType[orderType["Urgent"] = 1] = "Urgent";
-    orderType[orderType["Fragile"] = 2] = "Fragile";
-})(orderType || (orderType = {}));
+var OrderType;
+(function (OrderType) {
+    OrderType[OrderType["Normal"] = 0] = "Normal";
+    OrderType[OrderType["Urgent"] = 1] = "Urgent";
+    OrderType[OrderType["Fragile"] = 2] = "Fragile";
+})(OrderType || (OrderType = {}));
 ;
 var Status;
 (function (Status) {
@@ -26,18 +26,16 @@ var Status;
 // Order schema based on Order interface
 const orderSchema = new Schema({
     type: {
-        type: Number,
-        default: orderType.Normal,
-        enum: Object.values(orderType)
+        type: String,
+        enum: Object.values(OrderType)
     },
     description: String,
     route: { type: 'ObjectID', ref: 'Route' },
     status: {
-        type: Number,
-        default: Status.Created,
+        type: String,
         enum: Object.values(Status)
     },
-    truck: { type: 'ObjectID', ref: 'Truck' },
+    truck: { type: 'ObjectID', ref: 'Truck' }
 });
 /**
  * Gets all existing Orders
@@ -51,4 +49,4 @@ orderSchema.static('getAllOrders', function getAllOrders() {
 });
 // Order model based on Order schema
 const Order = model('Order', orderSchema);
-export { Order };
+export { Order, OrderType, Status };

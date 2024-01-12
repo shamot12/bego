@@ -14,6 +14,7 @@ interface ITruckMethods { }
   
 interface TruckModel extends Model<Required<ITruck>, {}, ITruckMethods> {
     getAllTrucks():  Promise<Array<HydratedDocument<ITruck, ITruckMethods>>>;
+    getTruck(truckId: string):  Promise<HydratedDocument<ITruck, ITruckMethods>>;
 }
 
 // Truck schema based on Truck interface
@@ -52,7 +53,23 @@ truckSchema.static('getAllTrucks', async function getAllTrucks ():  Promise<Arra
     const trucks = await Truck.find();
     
     return trucks;
-})
+});
+
+/**
+ * Gets all existing trucks
+ * @returns Trucks document array
+ */
+truckSchema.static('getTruck', async function getTruck (truckId: string):  Promise<HydratedDocument<ITruck, ITruckMethods>> {
+    try{
+        const truck = await Truck.findOne({_id: truckId});
+        if(truck !== null)
+            return truck;
+
+        throw { message : 'Invalid truck.' };
+    } catch(err) {
+        throw { message : 'Invalid truck.' };
+    }
+});
 
 // Truck model based on Truck schema
 const Truck = model<Required<ITruck>, TruckModel> ('Truck' , truckSchema);
