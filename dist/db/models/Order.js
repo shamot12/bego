@@ -38,13 +38,33 @@ const orderSchema = new Schema({
     truck: { type: 'ObjectID', ref: 'Truck' }
 });
 /**
- * Gets all existing Orders
+ * Gets all existing orders
  * @returns Orders document array
  */
 orderSchema.static('getAllOrders', function getAllOrders() {
     return __awaiter(this, void 0, void 0, function* () {
-        const Orders = yield Order.find();
+        const Orders = yield Order.find({}, { _id: 0 });
         return Orders;
+    });
+});
+/**
+ * Gets an existing order
+ * @returns Order document
+ * @throws message
+ */
+orderSchema.static('getOrder', function getOrder(orderId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const order = yield Order.findOne({ '_id': orderId }, { '_id': 0 })
+                .populate('route', { _id: 0 }).populate('truck');
+            if (order !== null)
+                return order;
+            throw { message: 'The order does not exist.' };
+        }
+        catch (err) {
+            // Invalid oid
+            throw { message: 'The order does not exist.' };
+        }
     });
 });
 // Order model based on Order schema

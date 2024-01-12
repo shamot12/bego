@@ -64,6 +64,26 @@ async function CreateOrder (req: Request, res: Response) {
     }
 }
 
+/**
+ * Retrieves an existing Order
+ */
+async function ReadOrder (req: Request, res: Response) {
+    try {
+        const result = validationResult(req);
+        if (!result.isEmpty()) { // Valid data for request
+            return res.status(400).send({ success: false, errors: result.array().map(function(err){
+                return err.msg // Returns errors of data validation
+            })});
+        }
+        const data = matchedData(req);
+        
+        var order = await Order.getOrder(data.orderId);
+
+        return res.status(200).send({ success: true, order : order });
+    } catch (error: any) {
+        return res.status(400).send({ success: false, message : error.message });
+    }
+}
 
 
-export { AllOrders, CreateOrder }
+export { AllOrders, CreateOrder, ReadOrder }

@@ -27,7 +27,7 @@ const pointSchema = new Schema({
  */
 pointSchema.static('getAllPoints', function getAllPoints() {
     return __awaiter(this, void 0, void 0, function* () {
-        const points = yield Point.find();
+        const points = yield Point.find({}, { '_id': 0 });
         return points;
     });
 });
@@ -38,7 +38,7 @@ pointSchema.static('getAllPoints', function getAllPoints() {
  */
 pointSchema.static('getPoint', function getPoint(name) {
     return __awaiter(this, void 0, void 0, function* () {
-        const point = yield Point.findOne({ 'location.name': name });
+        const point = yield Point.findOne({ 'location.name': name }, { '_id': 0 });
         if (point !== null)
             return point;
         throw { message: 'Invalid point' };

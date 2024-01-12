@@ -58,6 +58,7 @@ truckSchema.static('getTruck', function getTruck(truckId) {
             throw { message: 'Invalid truck.' };
         }
         catch (err) {
+            // Invalid oid
             throw { message: 'Invalid truck.' };
         }
     });

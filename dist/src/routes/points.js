@@ -4,4 +4,4 @@ export const pointsRouter = express.Router();
 /**
  * Retrieves all points available
  */
-pointsRouter.get('/get', AllPoints);
+pointsRouter.get('/getAll', AllPoints);

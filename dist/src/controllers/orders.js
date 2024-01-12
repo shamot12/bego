@@ -65,4 +65,25 @@ function CreateOrder(req, res) {
         }
     });
 }
-export { AllOrders, CreateOrder };
+/**
+ * Retrieves an existing Order
+ */
+function ReadOrder(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const result = validationResult(req);
+            if (!result.isEmpty()) { // Valid data for request
+                return res.status(400).send({ success: false, errors: result.array().map(function (err) {
+                        return err.msg; // Returns errors of data validation
+                    }) });
+            }
+            const data = matchedData(req);
+            var order = yield Order.getOrder(data.orderId);
+            return res.status(200).send({ success: true, order: order });
+        }
+        catch (error) {
+            return res.status(400).send({ success: false, message: error.message });
+        }
+    });
+}
+export { AllOrders, CreateOrder, ReadOrder };

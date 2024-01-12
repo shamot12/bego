@@ -67,6 +67,7 @@ truckSchema.static('getTruck', async function getTruck (truckId: string):  Promi
 
         throw { message : 'Invalid truck.' };
     } catch(err) {
+        // Invalid oid
         throw { message : 'Invalid truck.' };
     }
 });

@@ -47,7 +47,7 @@ const routeSchema = new Schema<Required<IRoute>, RouteModel, IRouteMethods>({
  * @returns Routes document array
  */
 routeSchema.static('getAllRoutes', async function getAllRoutes ():  Promise<Array<HydratedDocument<IRoute, IRouteMethods>>>{
-    const routes = await Route.find();
+    const routes = await Route.find({}, {'_id': 0 });
     
     return routes;
 });
@@ -62,12 +62,12 @@ routeSchema.static('routeExists', async function routeExists (namePointA: string
 });
 
 /**
- * Gets an existing route, if it exists
+ * Gets an existing route
  * @returns Route document
  * @throws message
  */
 routeSchema.static('getRoute', async function getRoute (namePointA: string, namePointB: string):  Promise<HydratedDocument<Required<IRoute>, IRouteMethods>> {
-    const route = await Route.findOne({ "pointA.name": namePointA, "pointB.name": namePointB });
+    const route = await Route.findOne({ "pointA.name": namePointA, "pointB.name": namePointB }, {'_id': 0 });
     if(route !== null)
         return route;
 

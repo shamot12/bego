@@ -26,6 +26,7 @@ interface IOrderMethods { }
   
 interface OrderModel extends Model<Required<IOrder>, {}, IOrderMethods> {
     getAllOrders():  Promise<Array<HydratedDocument<Required<IOrder>, IOrderMethods>>>;
+    getOrder(orderId: string):  Promise<HydratedDocument<Required<IOrder>, IOrderMethods>>;
 }
 
 // Order schema based on Order interface
@@ -44,15 +45,33 @@ const orderSchema = new Schema<Required<IOrder>, OrderModel, IOrderMethods>({
 });
 
 /**
- * Gets all existing Orders
+ * Gets all existing orders
  * @returns Orders document array
  */
 orderSchema.static('getAllOrders', async function getAllOrders ():  Promise<Array<HydratedDocument<IOrder, IOrderMethods>>>{
-    const Orders = await Order.find();
+    const Orders = await Order.find({}, { _id : 0 });
     
     return Orders;
 });
 
+/**
+ * Gets an existing order
+ * @returns Order document
+ * @throws message
+ */
+orderSchema.static('getOrder', async function getOrder (orderId: string):  Promise<HydratedDocument<Required<IOrder>, IOrderMethods>> {
+    try{
+        const order = await Order.findOne({ '_id': orderId }, {'_id': 0 })
+                                    .populate('route', { _id : 0 }).populate('truck');
+        if(order !== null)
+            return order;
+
+        throw { message : 'The order does not exist.' };
+    } catch (err) {
+        // Invalid oid
+        throw { message : 'The order does not exist.' };
+    }
+});
 
 // Order model based on Order schema
 const Order = model<Required<IOrder>, OrderModel> ('Order' , orderSchema);
