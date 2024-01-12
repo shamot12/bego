@@ -32,7 +32,7 @@ const validRequest: RequestHandler = async (req: Request, res: Response, next: N
         try {
             var decoded = <jwt.UserTokenJwtPayload> jwt.verify(token, key);
 
-            // Validate token expiration
+            // Validate token expiration - may not be required always true.
             if(decoded.exp < (new Date().getTime() / 1000)){
                 return res.status(403).send('Session expired. Please sign in again.');
             }
@@ -43,8 +43,11 @@ const validRequest: RequestHandler = async (req: Request, res: Response, next: N
             }
 
             next();
-        } catch(err) {
-            return res.status(400).send('Bad request');
+        } catch(err: any) {
+            if(err.toString().indexOf('TokenExpiredError') == 0){
+                return res.status(403).send('Token expired. Please sign in again.');
+            }
+            return res.status(400).send('Bad request: ' + err.toString());
         }
     }
 }

@@ -25,12 +25,20 @@ const userSchema = new Schema({
         required: [true, 'Password required']
     },
 });
+/**
+ * Verifies if an email is already registered
+ * @returns boolean
+ */
 userSchema.static('emailAlreadyRegistered', function emailAlreadyRegistered(email) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield User.findOne({ email: email });
         return !(user == null);
     });
 });
+/**
+ * Validates if user is registered and if password is correct
+ * @returns boolean
+ */
 userSchema.static('validCredentials', function validCredentials(email, password) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield User.findOne({ email: email });

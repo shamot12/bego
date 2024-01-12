@@ -30,11 +30,19 @@ const userSchema = new Schema<Required<IUser>, UserModel, IUserMethods>({
     },
 });
 
+/**
+ * Verifies if an email is already registered
+ * @returns boolean
+ */
 userSchema.static('emailAlreadyRegistered', async function emailAlreadyRegistered(email: string): Promise<boolean> {
     const user = await User.findOne({ email : email })
     return !(user == null);
 });
 
+/**
+ * Validates if user is registered and if password is correct
+ * @returns boolean
+ */
 userSchema.static('validCredentials', async function validCredentials(email: string, password: string): Promise<boolean> {
     const user: IUser | null = await User.findOne({ email: email })
 
