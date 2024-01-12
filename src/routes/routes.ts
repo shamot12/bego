@@ -1,7 +1,7 @@
 import express from 'express';
-import { checkSchema } from 'express-validator';
+import { body } from 'express-validator';
 
-import { AllRoutes, CreateRoute, ReadRoute, DeleteRoute } from '../controllers/routes.js'
+import { AllRoutes, CreateRoute, ReadRoute, UpdateRoute, DeleteRoute } from '../controllers/routes.js'
 
 export const routesRouter = express.Router();
 
@@ -10,20 +10,17 @@ export const routesRouter = express.Router();
  */
 routesRouter.get('/getAll', AllRoutes);
 
-const routeValidatorSchema = checkSchema({
-    pointA: {
-        isLength: {
-            options: { min: 4 },
-            errorMessage: 'Invalid payload',
-        },
-    },
-    pointB: {
-        isLength: {
-            options: { min: 4 },
-            errorMessage: 'Invalid payload',
-        },
-    }
-});
+const routeValidatorSchema = [
+    body('pointA').trim().isLength({ min: 4 }).withMessage('Invalid payload'),
+    body('pointB').trim().isLength({ min: 4 }).withMessage('Invalid payload')
+];
+
+const routeUpdateValidatorSchema = [
+    body('old.pointA').trim().isLength({ min: 4 }).withMessage('Invalid payload'),
+    body('old.pointB').trim().isLength({ min: 4 }).withMessage('Invalid payload'),
+    body('new.pointA').trim().isLength({ min: 4 }).withMessage('Invalid payload'),
+    body('new.pointB').trim().isLength({ min: 4 }).withMessage('Invalid payload')
+];
 
 /**
  * Creates a new route
@@ -36,6 +33,11 @@ routesRouter.post('/create', routeValidatorSchema, CreateRoute);
 routesRouter.get('/read', routeValidatorSchema, ReadRoute);
 
 /**
- * Reads an existing route
+ * Updates an existing route
+ */
+routesRouter.put('/update', routeUpdateValidatorSchema, UpdateRoute);
+
+/**
+ * Deletes an existing route
  */
 routesRouter.delete('/delete', routeValidatorSchema, DeleteRoute);

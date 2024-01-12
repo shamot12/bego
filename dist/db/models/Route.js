@@ -56,8 +56,32 @@ routeSchema.static('getRoute', function getRoute(namePointA, namePointB) {
     });
 });
 /**
- * Gets an existing route, if it exists
- * @returns Route document
+ * Updates the current instance document
+ * @returns boolean true when success
+ * @throws message
+ */
+routeSchema.method('updateRoute', function updateRoute(namePointA, latPointA, lngPointA, namePointB, latPointB, lngPointB, distance) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const update = yield Route.updateOne({ _id: this._id }, {
+                "pointA.name": namePointA,
+                "pointA.lat": latPointA,
+                "pointA.lng": lngPointA,
+                "pointB.name": namePointB,
+                "pointB.lat": latPointB,
+                "pointB.lng": lngPointB,
+                "distane": distance
+            });
+            return update.acknowledged;
+        }
+        catch (e) {
+            throw { message: 'Error on deleting route' };
+        }
+    });
+});
+/**
+ * Deletes the current instance document
+ * @returns boolean true when success
  * @throws message
  */
 routeSchema.method('deleteRoute', function deleteRoute() {

@@ -17,6 +17,8 @@ interface IRoute {
 
 interface IRouteMethods { 
     deleteRoute(): Promise<boolean>;
+    updateRoute(namePointA: string, latPointA: number, lngPointA: number,
+        namePointB: string, latPointB: number, lngPointB: number, distance: number): Promise<boolean>;
 }
   
 interface RouteModel extends Model<Required<IRoute>, {}, IRouteMethods> {
@@ -73,8 +75,32 @@ routeSchema.static('getRoute', async function getRoute (namePointA: string, name
 });
 
 /**
- * Gets an existing route, if it exists
- * @returns Route document
+ * Updates the current instance document 
+ * @returns boolean true when success
+ * @throws message
+ */
+routeSchema.method('updateRoute', async function updateRoute (namePointA: string, latPointA: number, lngPointA: number,
+    namePointB: string, latPointB: number, lngPointB: number, distance: number):  Promise<boolean> {
+    try{
+        const update = await Route.updateOne({ _id : this._id }, {
+            "pointA.name" : namePointA,
+            "pointA.lat" : latPointA,
+            "pointA.lng" : lngPointA,
+            "pointB.name" : namePointB,
+            "pointB.lat" : latPointB,
+            "pointB.lng" : lngPointB,
+            "distane": distance
+        });
+        
+        return update.acknowledged;
+    } catch(e) {
+        throw { message : 'Error on deleting route' };
+    }
+});
+
+/**
+ * Deletes the current instance document 
+ * @returns boolean true when success
  * @throws message
  */
 routeSchema.method('deleteRoute', async function deleteRoute ():  Promise<boolean> {
