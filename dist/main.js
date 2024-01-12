@@ -6,6 +6,7 @@ import { authRouter } from './src/routes/auth.js';
 import { pointsRouter } from './src/routes/points.js';
 import { trucksRouter } from './src/routes/trucks.js';
 import { routesRouter } from './src/routes/routes.js';
+import { ordersRouter } from './src/routes/orders.js';
 import { notFound, validRequest } from './src/middleware/validation.js';
 setDBConnection().catch(err => {
     console.log('Unable to connect to DB');
@@ -23,6 +24,7 @@ app.use(validRequest);
 app.use('/points', pointsRouter);
 app.use('/trucks', trucksRouter);
 app.use('/routes', routesRouter);
+app.use('/orders', ordersRouter);
 // Server validation
 app.use(notFound);
 // API

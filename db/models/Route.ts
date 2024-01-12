@@ -1,4 +1,4 @@
-import { Schema, model, Model, HydratedDocument, Types } from 'mongoose';
+import { Schema, model, Model, HydratedDocument } from 'mongoose';
 
 // Route interface
 interface IRoute {

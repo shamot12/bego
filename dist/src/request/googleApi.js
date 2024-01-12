@@ -22,9 +22,15 @@ function GoogleGoordinatesRequest(placeId) {
     return __awaiter(this, void 0, void 0, function* () {
         yield delay(100);
         const url = `https://maps.googleapis.com/maps/api/geocode/json?place_id=${placeId}&key=${process.env.MAPS_GOOGLE_APIS_KEY}`;
-        console.log(url);
+        const options = {
+            method: 'GET',
+            headers: {
+                'Connection': 'keep-alive'
+            }
+        };
+        // console.log(url);
         try {
-            const response = yield fetch(url);
+            const response = yield fetch(url, options);
             const body = yield response.json();
             if (body.status == 'OK') {
                 return { lat: body.results[0].geometry.location.lat, lng: body.results[0].geometry.location.lng };
@@ -67,11 +73,14 @@ function GoogleDistanceRequest(from, to) {
             },
             "travelMode": "DRIVE"
         };
+        const apiKey = (process.env.MAPS_GOOGLE_APIS_KEY || '');
         const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Goog-Api-Key': process.env.MAPS_GOOGLE_APIS_KEY || '',
+                'Content-Length': JSON.stringify(data).length.toString(),
+                'Connection': 'keep-alive',
+                'X-Goog-Api-Key': apiKey,
                 'X-Goog-FieldMask': 'routes.distanceMeters'
             },
             body: JSON.stringify(data)
