@@ -59,11 +59,11 @@ For creating and updating _Routes_, _Points'_ coordenates and the distance betwe
 - `DELETE /orders/delete`: deletes an existing order using the `orderId`.
 
 The value fields format for this module are:
-`type`: number in range 0 to 2. Maped to the `OrderType enum` which values are _Normal_, _Urgent_, _Fragile_. As the string values are stored in DB, number values are used on endpoints consumption.
-`description`: string, length at least 4.
-`route`: object, with two keys: `pickup` and `dropoff`. Both values must be strings with the names of valid _Points_, as in _Routes_ module.
-`status`: number in range 0 to 3. Maped to the `Status enum` which values are stored in DB and are _Created_, _Scheduled_, _OnProgress_, _Completed_. As the string values are stored in DB, number values are used on endpoints consumption.
-`truck`: string, it must be the `oid` of an existing truck.
+- `type`: number in range 0 to 2. Maped to the `OrderType enum` which values are _Normal_, _Urgent_, _Fragile_. As the string values are stored in DB, number values are used on endpoints consumption.
+- `description`: string, length at least 4.
+- `route`: object, with two keys: `pickup` and `dropoff`. Both values must be strings of the names of valid _Points_, as in _Routes_ module.
+- `status`: number in range 0 to 3. Maped to the `Status enum` which values are stored in DB and are _Created_, _Scheduled_, _OnProgress_, _Completed_. As the string values are stored in DB, number values are used on endpoints consumption.
+- `truck`: string, it must be the `oid` of an existing truck.
 
 Note that an order cannot be updated if order status is _OnProgress_ or _Completed_, and it cannot be deleted if order status is _OnProgress_.
 
