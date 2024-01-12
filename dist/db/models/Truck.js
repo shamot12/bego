@@ -45,6 +45,24 @@ truckSchema.static('getAllTrucks', function getAllTrucks() {
         return trucks;
     });
 });
+/**
+ * Gets all existing trucks
+ * @returns Trucks document array
+ */
+truckSchema.static('getTruck', function getTruck(truckId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const truck = yield Truck.findOne({ _id: truckId });
+            if (truck !== null)
+                return truck;
+            throw { message: 'Invalid truck.' };
+        }
+        catch (err) {
+            // Invalid oid
+            throw { message: 'Invalid truck.' };
+        }
+    });
+});
 // Truck model based on Truck schema
 const Truck = model('Truck', truckSchema);
 export { Truck };

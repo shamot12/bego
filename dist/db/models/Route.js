@@ -28,7 +28,7 @@ const routeSchema = new Schema({
  */
 routeSchema.static('getAllRoutes', function getAllRoutes() {
     return __awaiter(this, void 0, void 0, function* () {
-        const routes = yield Route.find();
+        const routes = yield Route.find({}, { '_id': 0 });
         return routes;
     });
 });
@@ -43,13 +43,26 @@ routeSchema.static('routeExists', function routeExists(namePointA, namePointB) {
     });
 });
 /**
- * Gets an existing route, if it exists
+ * Gets an existing route
  * @returns Route document
  * @throws message
  */
 routeSchema.static('getRoute', function getRoute(namePointA, namePointB) {
     return __awaiter(this, void 0, void 0, function* () {
         const route = yield Route.findOne({ "pointA.name": namePointA, "pointB.name": namePointB });
+        if (route !== null)
+            return route;
+        throw { message: 'The route does not exist.' };
+    });
+});
+/**
+ * Gets an existing route by Id
+ * @returns Route document
+ * @throws message
+ */
+routeSchema.static('getRouteById', function getRouteById(routeId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const route = yield Route.findOne({ "_id": routeId });
         if (route !== null)
             return route;
         throw { message: 'The route does not exist.' };
