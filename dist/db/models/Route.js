@@ -49,10 +49,26 @@ routeSchema.static('routeExists', function routeExists(namePointA, namePointB) {
  */
 routeSchema.static('getRoute', function getRoute(namePointA, namePointB) {
     return __awaiter(this, void 0, void 0, function* () {
-        const route = yield Route.findOne({ "pointA.name": namePointA, "pointB.name": namePointB }, { pointA: 1, pointB: 1, distance: 1 });
+        const route = yield Route.findOne({ "pointA.name": namePointA, "pointB.name": namePointB });
         if (route !== null)
             return route;
         throw { message: 'The route does not exist.' };
+    });
+});
+/**
+ * Gets an existing route, if it exists
+ * @returns Route document
+ * @throws message
+ */
+routeSchema.method('deleteRoute', function deleteRoute() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield this.deleteOne();
+            return true;
+        }
+        catch (e) {
+            throw { message: 'Error on deleting route' };
+        }
     });
 });
 // Route model based on Route schema

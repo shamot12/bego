@@ -92,8 +92,8 @@ function ReadRoute(req, res) {
                 return res.status(400).send({ success: false, message: 'Invalid payload' });
             }
             // First, verify that the starting and the ending Points are valid.
-            const pointA = yield Point.getPoint(data.pointA);
-            const pointB = yield Point.getPoint(data.pointB);
+            yield Point.getPoint(data.pointA);
+            yield Point.getPoint(data.pointB);
             // If both points are valid, look for route
             var route = yield Route.getRoute(data.pointA, data.pointB);
             return res.status(200).send({ success: true, route: route });
@@ -103,4 +103,33 @@ function ReadRoute(req, res) {
         }
     });
 }
-export { AllRoutes, CreateRoute, ReadRoute };
+/**
+ * Reads an existing route
+ */
+function DeleteRoute(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const result = validationResult(req);
+            if (!result.isEmpty()) { // Valid data for request
+                return res.status(400).send({ success: false, errors: result.array().map(function (err) {
+                        return err.msg; // Returns errors of data validation
+                    }) });
+            }
+            const data = matchedData(req);
+            if (data.pointA == data.pointB) { // Departure and arrival must be different.
+                return res.status(400).send({ success: false, message: 'Invalid payload' });
+            }
+            // First, verify that the starting and the ending Points are valid.
+            yield Point.getPoint(data.pointA);
+            yield Point.getPoint(data.pointB);
+            // If both points are valid, look for route
+            var route = yield Route.getRoute(data.pointA, data.pointB);
+            yield route.deleteRoute();
+            return res.status(200).send({ success: true, message: 'Route was successfully deleted' });
+        }
+        catch (error) {
+            return res.status(400).send({ success: false, message: error.message });
+        }
+    });
+}
+export { AllRoutes, CreateRoute, ReadRoute, DeleteRoute };

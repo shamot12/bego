@@ -1,7 +1,7 @@
 import express from 'express';
 import { checkSchema } from 'express-validator';
 
-import { AllRoutes, CreateRoute, ReadRoute } from '../controllers/routes.js'
+import { AllRoutes, CreateRoute, ReadRoute, DeleteRoute } from '../controllers/routes.js'
 
 export const routesRouter = express.Router();
 
@@ -10,9 +10,6 @@ export const routesRouter = express.Router();
  */
 routesRouter.get('/getAll', AllRoutes);
 
-/**
- * Creates a new route
- */
 const routeValidatorSchema = checkSchema({
     pointA: {
         isLength: {
@@ -27,10 +24,18 @@ const routeValidatorSchema = checkSchema({
         },
     }
 });
-routesRouter.post('/create', routeValidatorSchema, CreateRoute);
 
+/**
+ * Creates a new route
+ */
+routesRouter.post('/create', routeValidatorSchema, CreateRoute);
 
 /**
  * Reads an existing route
  */
-routesRouter.post('/get', routeValidatorSchema, ReadRoute);
+routesRouter.get('/read', routeValidatorSchema, ReadRoute);
+
+/**
+ * Reads an existing route
+ */
+routesRouter.delete('/delete', routeValidatorSchema, DeleteRoute);

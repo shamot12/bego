@@ -15,7 +15,9 @@ interface IRoute {
     distance: number;
 }
 
-interface IRouteMethods { }
+interface IRouteMethods { 
+    deleteRoute(): Promise<boolean>;
+}
   
 interface RouteModel extends Model<Required<IRoute>, {}, IRouteMethods> {
     getAllRoutes():  Promise<Array<HydratedDocument<Required<IRoute>, IRouteMethods>>>;
@@ -68,6 +70,20 @@ routeSchema.static('getRoute', async function getRoute (namePointA: string, name
         return route;
 
     throw { message : 'The route does not exist.' };
+});
+
+/**
+ * Gets an existing route, if it exists
+ * @returns Route document
+ * @throws message
+ */
+routeSchema.method('deleteRoute', async function deleteRoute ():  Promise<boolean> {
+    try{
+        await this.deleteOne();
+        return true;
+    } catch(e) {
+        throw { message : 'Error on deleting route' };
+    }
 });
 
 
