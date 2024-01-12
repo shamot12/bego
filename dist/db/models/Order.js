@@ -55,7 +55,7 @@ orderSchema.static('getAllOrders', function getAllOrders() {
 orderSchema.static('getOrder', function getOrder(orderId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const order = yield Order.findOne({ '_id': orderId }, { '_id': 0 })
+            const order = yield Order.findOne({ '_id': orderId })
                 .populate('route', { _id: 0 }).populate('truck');
             if (order !== null)
                 return order;
@@ -64,6 +64,25 @@ orderSchema.static('getOrder', function getOrder(orderId) {
         catch (err) {
             // Invalid oid
             throw { message: 'The order does not exist.' };
+        }
+    });
+});
+/**
+ * Deletes the current instance document
+ * @returns boolean true when success
+ * @throws message
+ */
+orderSchema.method('deleteOrder', function deleteOrder() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            if (this.status == Status[Status.OnProgress]) {
+                return false;
+            }
+            yield this.deleteOne();
+            return true;
+        }
+        catch (e) {
+            throw { message: 'Error on deleting order' };
         }
     });
 });

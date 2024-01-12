@@ -3,7 +3,7 @@ import { body } from 'express-validator';
 
 import { OrderType, Status } from '../../db/models/Order.js'
 
-import { AllOrders, CreateOrder, ReadOrder } from '../controllers/orders.js'
+import { AllOrders, CreateOrder, ReadOrder, DeleteOrder } from '../controllers/orders.js'
 
 export const ordersRouter = express.Router();
 
@@ -25,16 +25,21 @@ const orderIdValidatorSchema = [
  */
 ordersRouter.get('/getAll', AllOrders);
 
+
 /**
  * Creates a new order
  */
 ordersRouter.post('/create', orderDataValidatorSchema, CreateOrder);
 
-
 /**
  * Reads an existing order
  */
 ordersRouter.get('/read', orderIdValidatorSchema, ReadOrder);
+
+/**
+ * Deletes an existing order
+ */
+ordersRouter.delete('/delete', orderIdValidatorSchema, DeleteOrder);
 
 
 

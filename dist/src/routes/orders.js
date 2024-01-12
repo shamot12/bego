@@ -1,7 +1,7 @@
 import express from 'express';
 import { body } from 'express-validator';
 import { OrderType, Status } from '../../db/models/Order.js';
-import { AllOrders, CreateOrder, ReadOrder } from '../controllers/orders.js';
+import { AllOrders, CreateOrder, ReadOrder, DeleteOrder } from '../controllers/orders.js';
 export const ordersRouter = express.Router();
 const orderDataValidatorSchema = [
     body('type').isFloat({ min: 0, max: (Object.values(OrderType).length / 2 - 1) }).withMessage('Invalid type'),
@@ -26,3 +26,7 @@ ordersRouter.post('/create', orderDataValidatorSchema, CreateOrder);
  * Reads an existing order
  */
 ordersRouter.get('/read', orderIdValidatorSchema, ReadOrder);
+/**
+ * Deletes an existing order
+ */
+ordersRouter.delete('/delete', orderIdValidatorSchema, DeleteOrder);

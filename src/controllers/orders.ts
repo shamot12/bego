@@ -65,7 +65,7 @@ async function CreateOrder (req: Request, res: Response) {
 }
 
 /**
- * Retrieves an existing Order
+ * Retrieves an existing order
  */
 async function ReadOrder (req: Request, res: Response) {
     try {
@@ -86,4 +86,31 @@ async function ReadOrder (req: Request, res: Response) {
 }
 
 
-export { AllOrders, CreateOrder, ReadOrder }
+/**
+ * Deletes an existing order
+ */
+async function DeleteOrder (req: Request, res: Response) {
+    try {
+        const result = validationResult(req);
+        if (!result.isEmpty()) { // Valid data for request
+            return res.status(400).send({ success: false, errors: result.array().map(function(err){
+                return err.msg // Returns errors of data validation
+            })});
+        }
+        const data = matchedData(req);
+
+        // If both points are valid, look for Order
+        var order = await Order.getOrder(data.orderId);
+
+        if(await order.deleteOrder()){
+            return res.status(200).send({ success: true, message : 'Order was successfully deleted' });
+        } else {
+            return res.status(200).send({ success: false, message : 'The order is in progress. It cannot be deleted.' });
+        }
+    } catch (error: any) {
+        return res.status(400).send({ success: false, message : error.message });
+    }
+}
+
+
+export { AllOrders, CreateOrder, ReadOrder, DeleteOrder }

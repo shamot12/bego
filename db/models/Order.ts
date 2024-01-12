@@ -22,7 +22,9 @@ interface IOrder {
     truck : Types.ObjectId;
 }
 
-interface IOrderMethods { }
+interface IOrderMethods {
+    deleteOrder(): Promise<boolean>;
+}
   
 interface OrderModel extends Model<Required<IOrder>, {}, IOrderMethods> {
     getAllOrders():  Promise<Array<HydratedDocument<Required<IOrder>, IOrderMethods>>>;
@@ -61,7 +63,7 @@ orderSchema.static('getAllOrders', async function getAllOrders ():  Promise<Arra
  */
 orderSchema.static('getOrder', async function getOrder (orderId: string):  Promise<HydratedDocument<Required<IOrder>, IOrderMethods>> {
     try{
-        const order = await Order.findOne({ '_id': orderId }, {'_id': 0 })
+        const order = await Order.findOne({ '_id': orderId })
                                     .populate('route', { _id : 0 }).populate('truck');
         if(order !== null)
             return order;
@@ -72,6 +74,24 @@ orderSchema.static('getOrder', async function getOrder (orderId: string):  Promi
         throw { message : 'The order does not exist.' };
     }
 });
+
+/**
+ * Deletes the current instance document 
+ * @returns boolean true when success
+ * @throws message
+ */
+orderSchema.method('deleteOrder', async function deleteOrder ():  Promise<boolean> {
+    try{
+        if(this.status == Status[Status.OnProgress]) {
+            return false;
+        }
+        await this.deleteOne();
+        return true;
+    } catch(e) {
+        throw { message : 'Error on deleting order' };
+    }
+});
+
 
 // Order model based on Order schema
 const Order = model<Required<IOrder>, OrderModel> ('Order' , orderSchema);
